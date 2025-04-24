@@ -13,14 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 Common:
-  model: deepseek-ai/DeepSeek-R1-Distill-Llama-8B
+  model: Qwen/Qwen2.5-72B-Instruct
   router: kv
   block-size: 64
   max-model-len: 16384
   kv-transfer-config: '{"kv_connector":"DynamoNixlConnector"}'
 
 Frontend:
-  served_model_name: deepseek-ai/DeepSeek-R1-Distill-Llama-8B
+  served_model_name: Qwen/Qwen2.5-72B-Instruct
   endpoint: dynamo.Processor.chat/completions
   port: 8000
 
@@ -35,9 +35,9 @@ VllmWorker:
   enforce-eager: true
   max-num-batched-tokens: 16384
   enable-prefix-caching: true
-  tensor-parallel-size: 4
+  tensor-parallel-size: 8
   ServiceArgs:
     workers: 1
     resources:
-      gpu: 4
+      gpu: 8
   common-configs: [model, block-size, max-model-len, router, kv-transfer-config]

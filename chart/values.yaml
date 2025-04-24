@@ -13,11 +13,67 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+configFilePath: /configs/disagg_router.yaml
+dynamoIdentifier: graphs.disagg_router:Frontend
+
+services:
+  - name: Frontend
+    config:
+      resources:
+        cpu: '10'
+        memory: 20Gi
+      workers: 1
+      dynamo:
+        enabled: false
+        name: Frontend
+        namespace: default
+
+  - name: Processor
+    config:
+      resources:
+        cpu: '10'
+        memory: 20Gi
+      workers: 1
+      dynamo:
+        enabled: true
+        name: Processor
+        namespace: dynamo
+
+  - name: Router
+    config:
+      resources:
+        cpu: '10'
+        memory: 20Gi
+      workers: 1
+      dynamo:
+        enabled: true
+        name: Router
+        namespace: dynamo
+
+  - name: VllmWorker
+    config:
+      resources:
+        gpu: 1
+        cpu: '10'
+        memory: 50Gi
+      workers: 1
+      dynamo:
+        enabled: true
+        name: VllmWorker
+        namespace: dynamo
+        
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: nvidia.com/gpu.product
+              operator: In
+              values:
+                - NVIDIA-L40S
+
 imagePullSecrets:
-# - name: yatai-regcred
-# - name: nvcrimagepullsecret
 - name: docker-imagepullsecret
-# - name: gitlab-imagepull
 
 natsAddr: nats://dynamo-platform-nats:4222
 etcdAddr: dynamo-platform-etcd:2379

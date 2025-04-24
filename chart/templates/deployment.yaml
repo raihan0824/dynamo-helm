@@ -29,15 +29,9 @@ spec:
       labels:
         app: {{ $.Release.Name }}-{{ .name | lower }}
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: nvidia.com/gpu.product
-                operator: In
-                values:
-                - NVIDIA-L40S
+      {{- if $.Values.affinity }}
+      affinity: {{ toYaml $.Values.affinity | nindent 8 }}
+      {{- end }}
       # pull secrets
       imagePullSecrets:
       {{- range $.Values.imagePullSecrets }}
