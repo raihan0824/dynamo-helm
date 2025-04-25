@@ -44,6 +44,39 @@ Alternatively, you can modify the `imagePullSecrets` section in `deploy/Kubernet
 ```bash
 bash deploy.sh
 ```
+### Configuration Details
+
+The deployment configuration is managed through two main files:
+
+1. **Resource Configuration** (`chart/values.yaml`):
+   - Frontend: 10 CPU, 20Gi Memory
+   - Processor: 10 CPU, 20Gi Memory
+   - Router: 10 CPU, 20Gi Memory
+   - VllmWorker: 1 GPU, 10 CPU, 50Gi Memory
+
+2. **Model Configuration** (`configs/agg_router.yaml`):
+   - Model: Qwen/Qwen2.5-72B-Instruct
+   - Block Size: 64
+   - Max Model Length: 16384
+   - Tensor Parallel Size: 8
+   - KV Router Configuration: Enabled with DynamoNixlConnector
+
+The deployment uses NVIDIA L40S GPUs as specified in the node affinity configuration.
+
+### Customizing the Configuration
+
+To modify the deployment:
+
+1. **Change Resources**:
+   Edit `chart/values.yaml` to adjust CPU, memory, and GPU allocations.
+
+2. **Change Model**:
+   Edit `configs/agg_router.yaml` to modify:
+   - Model name
+   - Block size
+   - Max model length
+   - Tensor parallel size
+   - KV router settings
 
 ### Test the deployment
 
